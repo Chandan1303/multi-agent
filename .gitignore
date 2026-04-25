@@ -20,7 +20,6 @@ trained_model/
 
 # Logs and outputs
 training_metrics.json
-training_results.png
 simulation_results.json
 *.log
 
