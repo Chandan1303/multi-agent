@@ -299,6 +299,11 @@ def run_simulation(req: SimulateRequest = None):
 
     return JSONResponse(content=logs)
 
+@app.get("/")
+def root():
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/dashboard")
+
 # --- Serve training results image ---
 _BASE_DIR = Path(__file__).parent.parent
 
