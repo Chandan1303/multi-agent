@@ -65,6 +65,26 @@ app = create_app(
     max_concurrent_envs=1,
 )
 
+# Allow Chart.js to work inside HuggingFace iframe (CSP fix)
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request as StarletteRequest
+
+class CSPMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: StarletteRequest, call_next):
+        response = await call_next(request)
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self' https:; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.googleapis.com; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+            "font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data: https:; "
+            "connect-src 'self' https:;"
+        )
+        return response
+
+app.add_middleware(CSPMiddleware)
+
 # ── Advanced reward/penalty engine ───────────────────────────────────────────
 def _compute_reward_breakdown(prev: dict, curr: dict, action) -> dict:
     p, e, s = curr["pollution"], curr["economy"], curr["satisfaction"]
