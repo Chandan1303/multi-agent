@@ -329,9 +329,18 @@ _BASE_DIR = Path(__file__).parent.parent
 
 @app.get("/training-results-img")
 def training_results_img():
-    img = _BASE_DIR / "training_results.png"
-    if img.exists():
-        return FileResponse(str(img), media_type="image/png")
+    # Check multiple possible locations for the plot (fixes HF spaces missing files)
+    possible_paths = [
+        _BASE_DIR / "ui" / "training_results.png",
+        _BASE_DIR / "training_results.png",
+        _BASE_DIR / "eval_results.png",
+        _BASE_DIR / "rl" / "eval_results.png"
+    ]
+    
+    for path in possible_paths:
+        if path.exists():
+            return FileResponse(str(path), media_type="image/png")
+            
     return JSONResponse({"error": "not found"}, status_code=404)
 
 # --- Global state for RL Agent ---

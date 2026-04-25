@@ -18,6 +18,8 @@ import random
 import torch
 import torch.nn.functional as F
 import numpy as np
+import matplotlib
+matplotlib.use('Agg') # Force headless rendering
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from transformers import AutoTokenizer, AutoModelForCausalLM
