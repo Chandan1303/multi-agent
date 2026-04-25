@@ -2,23 +2,25 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Suppress TensorFlow noise
 ENV TF_CPP_MIN_LOG_LEVEL=3
 ENV TF_ENABLE_ONEDNN_OPTS=0
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH="/app:$PYTHONPATH"
 
-# Install only what we need
+# Install core dependencies from PyPI
 RUN pip install --no-cache-dir \
     fastapi \
-    uvicorn[standard] \
+    "uvicorn[standard]" \
     openenv-core \
-    torch --index-url https://download.pytorch.org/whl/cpu \
     transformers \
     accelerate \
     pydantic
 
-# Copy app code
+# Install CPU-only torch separately (different index)
+RUN pip install --no-cache-dir \
+    torch \
+    --index-url https://download.pytorch.org/whl/cpu
+
 COPY . /app
 
 EXPOSE 8000
