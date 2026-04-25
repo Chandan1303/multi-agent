@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  smart-city-env:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_MODE: standalone
+    image: smart-city-openenv:latest
+    container_name: smart_city_openenv
+    ports:
+      - "8001:8000"       # access at http://localhost:8001
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount trained model so container can use it without rebuild
+      - ./trained_model:/app/env/trained_model:ro
+      - ./training_results.png:/app/env/training_results.png:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped

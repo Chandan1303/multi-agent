@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Model files (too large for git — upload separately to HF)
+trained_model/
+*.safetensors
+*.bin
+
+# Logs and outputs
+training_metrics.json
+training_results.png
+simulation_results.json
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
