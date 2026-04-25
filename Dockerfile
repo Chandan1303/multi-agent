@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir \
     openenv-core \
     transformers \
     accelerate \
+    huggingface_hub \
     pydantic
 
 # Install CPU-only torch separately (different index)

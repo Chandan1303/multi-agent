@@ -338,6 +338,17 @@ def _load_rl_model():
         sys.path.insert(0, _rl_dir)
 
     trained_path = str(_BASE_DIR / "trained_model")
+    HF_MODEL_ID  = "chandan1303/smart-city-tinyllama"  # HF Hub model repo
+
+    # If local model missing, try downloading from HF Hub
+    if not Path(trained_path).exists():
+        try:
+            from huggingface_hub import snapshot_download
+            print(f"Downloading model from HF Hub: {HF_MODEL_ID}")
+            trained_path = snapshot_download(repo_id=HF_MODEL_ID)
+            print(f"Model downloaded to: {trained_path}")
+        except Exception as dl_err:
+            print(f"HF Hub download failed: {dl_err}")
     
     try:
         import torch
