@@ -352,10 +352,7 @@ def run_simulation(req: SimulateRequest = None):
 
     return JSONResponse(content=logs)
 
-@app.get("/")
-def root():
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/dashboard")
+# Root route removed, dashboard will be mounted at /
 
 # --- Serve training results image ---
 _BASE_DIR = Path(__file__).parent.parent
@@ -543,10 +540,10 @@ def chat_endpoint(req: ChatRequest):
         print(f"Chatbot error: {e}")
         return JSONResponse({"response": f"System error: {str(e)}"})
 
-# --- Serve dashboard UI at /dashboard (avoids conflict with openenv's /ui) ---
+# --- Serve dashboard UI at / (avoids conflict with openenv's /ui) ---
 _UI_DIR = _BASE_DIR / "ui"
 if _UI_DIR.exists():
-    app.mount("/dashboard", StaticFiles(directory=str(_UI_DIR), html=True), name="dashboard")
+    app.mount("/", StaticFiles(directory=str(_UI_DIR), html=True), name="dashboard")
 
 
 def main(host: str = "0.0.0.0", port: int = 8000):
