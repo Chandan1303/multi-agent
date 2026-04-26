@@ -242,6 +242,38 @@ from pydantic import BaseModel
 class SimulateRequest(BaseModel):
     scenario: str = "standard"
 
+# ── City Grade calculator ─────────────────────────────────────────────────────
+def _city_grade(state: dict) -> dict:
+    p = state.get("pollution", 50)
+    e = state.get("economy", 50)
+    s = state.get("satisfaction", 50)
+    h = state.get("health", 70)
+    en = state.get("energy", 60)
+    b = state.get("budget", 100)
+
+    # Score 0-100 for each metric (higher = better)
+    scores = {
+        "pollution":    max(0, 100 - p),          # inverted
+        "economy":      e,
+        "satisfaction": s,
+        "health":       h,
+        "energy":       en,
+        "budget":       min(100, b / 2),           # 200 budget = 100 score
+    }
+    weights = {"pollution": 0.25, "economy": 0.20, "satisfaction": 0.20,
+               "health": 0.15, "energy": 0.10, "budget": 0.10}
+    total = sum(scores[k] * weights[k] for k in scores)
+
+    if total >= 85:   grade, color = "A+", "#10b981"
+    elif total >= 75: grade, color = "A",  "#10b981"
+    elif total >= 65: grade, color = "B",  "#38bdf8"
+    elif total >= 55: grade, color = "C",  "#f59e0b"
+    elif total >= 40: grade, color = "D",  "#f97316"
+    else:             grade, color = "F",  "#ef4444"
+
+    return {"grade": grade, "score": round(total, 1), "color": color, "breakdown": scores}
+
+
 # --- Simulation endpoint ---
 @app.post("/simulate")
 def run_simulation(req: SimulateRequest = None):
@@ -298,6 +330,7 @@ def run_simulation(req: SimulateRequest = None):
             "balance_bonus":breakdown["balance_bonus"],
             "penalty_reasons": breakdown["penalty_reasons"],
             "bonus_reasons":   breakdown["bonus_reasons"],
+            "grade":        _city_grade(curr),
             "messages":     step_messages,
             "agents": {
                 "industry":   {"action": ind_action, "reasoning": _agent_reasoning("industry",   state, ind_action)},
