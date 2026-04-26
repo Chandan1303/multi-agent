@@ -58,7 +58,8 @@ async function sendChatMessage() {
     }
     msgsDiv.scrollTop = msgsDiv.scrollHeight;
 }
-</script></body></html>
+function showGrade(last){if(!last||!last.grade)return;var g=last.grade;var el=document.getElementById("grade-display");if(!el)return;el.style.display="block";var letter=document.getElementById("grade-letter");letter.textContent=g.grade;letter.style.color=g.color;document.getElementById("grade-score").textContent=g.score+"/100";}async function runLive(){var btn=document.getElementById("live-btn");if(!btn)return;btn.disabled=true;btn.textContent="Running Live...";document.getElementById("log-tbody").innerHTML="";document.getElementById("event-log").innerHTML="";["stat-pollution","stat-economy","stat-satisfaction","stat-health","stat-energy","stat-budget","stat-reward"].forEach(function(id){document.getElementById(id).textContent="--";});simData=[];try{var scenario=document.getElementById("scenario-select").value;var res=await fetch("/simulate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scenario:scenario})});if(!res.ok)throw new Error("Error "+res.status);var allData=await res.json();for(var i=0;i<allData.length;i++){simData.push(allData[i]);updateStats(simData);renderSimCharts(simData);updateTable(simData);showGrade(allData[i]);await new Promise(function(r){setTimeout(r,300);});}updateEventLog(simData);if(typeof updateAgents==="function")updateAgents(simData);if(typeof renderComms==="function")renderComms(simData);showGrade(simData[simData.length-1]);}catch(e){document.getElementById("stat-pollution").innerHTML="<span style=color:#ef4444>"+e.message+"</span>";}finally{btn.disabled=false;btn.textContent="Live Mode";}}</script></body></html>
+
 
 
 
