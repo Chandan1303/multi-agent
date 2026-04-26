@@ -15,8 +15,7 @@ pinned: false
 
 | Resource | Link |
 |---|---|
-| 🚀 Live Demo | [https://chandan1303-smart-city-openenv.hf.space/dashboard](https://chandan1303-smart-city-openenv.hf.space/dashboard) |
-| 🤗 HuggingFace Space | [https://huggingface.co/spaces/chandan1303/smart-city-openenv](https://huggingface.co/spaces/chandan1303/smart-city-openenv) |
+| 🤗 HuggingFace Space Live Demo | [https://chandan1303-smart-city-openenv.hf.space/dashboard](https://chandan1303-smart-city-openenv.hf.space/dashboard) |
 | 📝 Blog Post | https://huggingface.co/spaces/chandan1303/smart-city-openenv-blogs   |
 | 📊 Presentation | https://docs.google.com/presentation/d/1T_UYsPdsUp7m2t61hEuoIA0IgAT-14_D/edit?usp=sharing&ouid=114324658033694579315&rtpof=true&sd=true  |
 | 💻 GitHub | [https://github.com/Chandan1303/multi-agent](https://github.com/Chandan1303/multi-agent) |
